@@ -5,6 +5,7 @@ import com.prashant21tube.repo.PersonRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,6 +29,24 @@ public class SimpleStreamExample {
                 .filter(p2)
                 .collect(Collectors.toMap(Person :: getName, Person::getHobbies));
 
-        System.out.println("Person hobbies" + personMap);
+        System.out.println("Person map" + personMap);
+
+        List<String> hobbies = PersonRepository
+                .getPersonList() //List of person
+                .stream() //Stream of person
+                .map(Person :: getHobbies) // Stream<List<String>>
+                .flatMap(List::stream) //Stream<String>
+                .distinct()
+                .collect(Collectors.toList());
+
+        System.out.println("Person Hobbies list"+hobbies);
+
+        Set<String > distHobbies = PersonRepository
+                .getPersonList()
+                .stream()
+                .map(Person::getHobbies)
+                .flatMap(List::stream)
+                .collect(Collectors.toSet());
+        System.out.println("Set of Hobbies" + distHobbies);
     }
 }
